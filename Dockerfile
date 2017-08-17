@@ -37,7 +37,7 @@ ENV ELASTALERT_SUPERVISOR_CONF ${CONFIG_DIR}/supervisord.conf
 WORKDIR /opt
 
 # Copy the script used to launch the Elastalert when a container is started.
-#COPY ./start.sh /opt/
+COPY ./start.sh /opt/
 
 # Install software required for Elastalert and NTP for time synchronization.
 RUN yum -y update && \
@@ -61,7 +61,7 @@ RUN curl "https://bootstrap.pypa.io/get-pip.py" -o "get-pip.py" && \
     easy_install supervisor && \
 
 # Make the start-script executable.
-#    chmod +x /opt/start-elastalert.sh && \
+    chmod +x /opt/start.sh && \
 
 # Create directories.
     mkdir -p "${CONFIG_DIR}" && \
@@ -79,4 +79,4 @@ RUN curl "https://bootstrap.pypa.io/get-pip.py" -o "get-pip.py" && \
 VOLUME [ "${CONFIG_DIR}", "${RULES_DIRECTORY}", "${LOG_DIR}"]
 
 # Launch Elastalert when a container is started.
-# CMD ["/opt/start.sh"]
+CMD ["/opt/start.sh"]
