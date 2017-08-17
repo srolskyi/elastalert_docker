@@ -60,9 +60,10 @@ WORKDIR "${ELASTALERT_HOME}"
 RUN curl "https://bootstrap.pypa.io/get-pip.py" -o "get-pip.py" && \
     python get-pip.py && \
     pip install "setuptools>=11.3" && \
+    pip install -r requirements.txt && \
     python setup.py install && \
     pip install -e . && \
-
+    pip install elastalert && \
 # Install Supervisor.
     easy_install supervisor && \
 
