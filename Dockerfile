@@ -28,11 +28,17 @@ ENV ELASTALERT_HOME /opt/${ELASTALERT_DIRECTORY_NAME}
 # Supervisor configuration file for Elastalert.
 ENV ELASTALERT_SUPERVISOR_CONF ${CONFIG_DIR}/supervisord.conf
 
-#### Alias, DNS or IP of Elasticsearch host to be queried by Elastalert. Set in default Elasticsearch configuration file.
-###ENV ELASTICSEARCH_HOST elasticsearchhost
+#Alias
+ENV ELASTICSEARCH_HOST elasticsearchhost
 
-#### Port on above Elasticsearch host. Set in default Elasticsearch configuration file.
-###ENV ELASTICSEARCH_PORT 9200
+# Port on above Elasticsearch host. Set in default Elasticsearch configuration file.
+ENV ELASTICSEARCH_PORT 9200
+
+# Use TLS to connect to Elasticsearch (true or false)
+ENV ELASTICSEARCH_TLS false
+
+# Verify TLS
+ENV ELASTICSEARCH_TLS_VERIFY true
 
 WORKDIR /opt
 
@@ -72,6 +78,25 @@ RUN curl "https://bootstrap.pypa.io/get-pip.py" -o "get-pip.py" && \
     cp "${ELASTALERT_HOME}/config.yaml.example" "${ELASTALERT_CONFIG}" && \
     cp "${ELASTALERT_HOME}/supervisord.conf.example" "${ELASTALERT_SUPERVISOR_CONF}" && \
 
+# Elastalert configuration:
+# Set the rule directory in the Elastalert config file to external rules directory.
+    sed -i -e "s|rules_folder: [[:print:]]*|rules_folder: ${RULES_DIRECTORY}|g" "${ELASTALERT_CONFIG}" && \
+# Set the Elasticsearch host that Elastalert is to query.
+    sed -i -e "s|es_host: [[:print:]]*|es_host: ${ELASTICSEARCH_HOST}|g" "${ELASTALERT_CONFIG}" && \
+# Set the port used by Elasticsearch at the above address.
+    sed -i -e "s|es_port: [0-9]*|es_port: ${ELASTICSEARCH_PORT}|g" "${ELASTALERT_CONFIG}" && \
+
+# Elastalert Supervisor configuration:
+    # Redirect Supervisor log output to a file in the designated logs directory.
+    sed -i -e"s|logfile=.*log|logfile=${LOG_DIR}/supervisord.log|g" "${ELASTALERT_SUPERVISOR_CONF}" && \
+    # Redirect Supervisor stderr output to a file in the designated logs directory.
+    sed -i -e"s|stderr_logfile=.*log|stderr_logfile=${LOG_DIR}/elastalert_stderr.log|g" "${ELASTALERT_SUPERVISOR_CONF}" && \
+    # Modify the start-command.
+    sed -i -e"s|python elastalert.py|python -m elastalert.elastalert --config ${ELASTALERT_CONFIG}|g" "${ELASTALERT_SUPERVISOR_CONF}" && \
+
+# Copy the Elastalert configuration file to Elastalert home directory to be used when creating index first time an Elastalert container is launched.
+    cp "${ELASTALERT_CONFIG}" "${ELASTALERT_HOME}/config.yaml" && \
+
 # Add Elastalert to Supervisord.
     supervisord -c "${ELASTALERT_SUPERVISOR_CONF}"
 
@@ -79,4 +104,4 @@ RUN curl "https://bootstrap.pypa.io/get-pip.py" -o "get-pip.py" && \
 VOLUME [ "${CONFIG_DIR}", "${RULES_DIRECTORY}", "${LOG_DIR}"]
 
 # Launch Elastalert when a container is started.
-CMD ["/opt/start.sh"]
+CMD [ "/opt/start.sh" ]
