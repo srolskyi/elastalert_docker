@@ -62,7 +62,6 @@ RUN curl "https://bootstrap.pypa.io/get-pip.py" -o "get-pip.py" && \
     python get-pip.py && \
     pip install "setuptools>=11.3" && \
     pip install -r requirements.txt && \
-#    python setup.py install && \
     pip install -e . && \
     pip install elastalert && \
 # Install Supervisor.
@@ -82,11 +81,11 @@ RUN curl "https://bootstrap.pypa.io/get-pip.py" -o "get-pip.py" && \
 
 # Elastalert configuration:
 # Set the rule directory in the Elastalert config file to external rules directory.
-    sed -i -e "s|rules_folder: [[:print:]]*|rules_folder: ${RULES_DIRECTORY}|g" "${ELASTALERT_CONFIG}" && \
+    sed -i -e"s|rules_folder: [[:print:]]*|rules_folder: ${RULES_DIRECTORY}|g" "${ELASTALERT_CONFIG}" && \
 # Set the Elasticsearch host that Elastalert is to query.
-    sed -i -e "s|es_host: [[:print:]]*|es_host: ${ELASTICSEARCH_HOST}|g" "${ELASTALERT_CONFIG}" && \
+    sed -i -e"s|es_host: [[:print:]]*|es_host: ${ELASTICSEARCH_HOST}|g" "${ELASTALERT_CONFIG}" && \
 # Set the port used by Elasticsearch at the above address.
-    sed -i -e "s|es_port: [0-9]*|es_port: ${ELASTICSEARCH_PORT}|g" "${ELASTALERT_CONFIG}" && \
+    sed -i -e"s|es_port: [0-9]*|es_port: ${ELASTICSEARCH_PORT}|g" "${ELASTALERT_CONFIG}" && \
 
 # Elastalert Supervisor configuration:
     # Redirect Supervisor log output to a file in the designated logs directory.
