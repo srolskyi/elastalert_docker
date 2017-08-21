@@ -47,7 +47,7 @@ COPY ./start.sh /opt/
 
 # Install software required for Elastalert and NTP for time synchronization.
 RUN yum -y update && \
-    yum -y install python-devel python-virtualenv openssl-devel libffi-devel gcc wget unzip && \
+    yum -y install python-devel python-virtualenv openssl-devel libffi-devel gcc wget unzip mailx && \
     virtualenv --python=python2.7 venv && \
 # Download and unpack Elastalert.
     wget -O elastalert.zip "${ELASTALERT_URL}" && \
