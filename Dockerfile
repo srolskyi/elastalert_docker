@@ -7,12 +7,6 @@ MAINTAINER Sergii Rolskyi
 # Download latest Elasticalert
 ENV ELASTALERT_URL https://github.com/Yelp/elastalert/archive/master.zip
 
-# Enable timezone
-ENV SET_CONTAINER_TIMEZONE true
-
-# Default container timezone
-ENV CONTAINER_TIMEZONE Europe/Berlin
-
 # Directory holding configuration for Elastalert and Supervisor.
 ENV CONFIG_DIR /opt/config
 
