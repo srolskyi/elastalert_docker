@@ -27,9 +27,7 @@ esac
 
 # Start automatic time synchronizationwith remote NTP server:
 echo "Set timezone"
-timedatactl set-timezone Europe/Berlin
-echo "enable ntp"
-timedatectl set-ntp true
+ln -snf /usr/share/zoneinfo/Europe/Berlin /etc/localtime
 
 # Wait until Elasticsearch is online since otherwise Elastalert will fail.
 if [ -n "$ELASTICSEARCH_USER" ] && [ -n "$ELASTICSEARCH_PASSWORD" ]; then
