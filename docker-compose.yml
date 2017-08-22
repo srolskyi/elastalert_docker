@@ -10,9 +10,9 @@ services:
                         - /opt/dc/elastalert/rules:/opt/rules
                         - /opt/dc/elastalert/logs:/opt/logs
                 environment:
-                       - SET_CONTAINET_TIMEZONE=true
-                       - CONTAINER_TIMEZONE=Europe/Berlin
-                       - ELASTICSEARCH_HOST=elastic-search.host.com
-                       - ELASTICSEARCH_PORT=9200
+                       - SET_CONTAINER_TIMEZONE=true 
+                       - CONTAINER_TIMEZONE=Europe/Berlin #set your timezone
+                       - ELASTICSEARCH_HOST=elastic-search.host.com #set your url or IP elasticsearch
+                       - ELASTICSEARCH_PORT=9200 #set port Elasticsearch
                        - ELASTALERT_INDEX=elastalert_status #default name index from elastalert
 
