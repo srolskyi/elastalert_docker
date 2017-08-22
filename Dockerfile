@@ -7,6 +7,12 @@ MAINTAINER Sergii Rolskyi
 # Download latest Elasticalert
 ENV ELASTALERT_URL https://github.com/Yelp/elastalert/archive/master.zip
 
+# Set this environment variable to true to set timezone on container start.
+ENV SET_CONTAINER_TIMEZONE false
+
+# Default container timezone as found under the directory /usr/share/zoneinfo/.
+ENV CONTAINER_TIMEZONE Europe/Berlin
+
 # Directory holding configuration for Elastalert and Supervisor.
 ENV CONFIG_DIR /opt/config
 

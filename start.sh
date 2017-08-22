@@ -18,16 +18,12 @@ case "${ELASTICSEARCH_TLS}:${ELASTICSEARCH_TLS_VERIFY}" in
 esac
 
 # Set the timezone.
-#if [ "$SET_CONTAINER_TIMEZONE" = "true" ]; then
-#        timedatectl set-timezone ${CONTAINER_TIMEZONE} && \
-#	echo "Container timezone set to: $CONTAINER_TIMEZONE"
-#else
-#	echo "Container timezone not modified"
-#fi
-
-# Start automatic time synchronizationwith remote NTP server:
-echo "Set timezone"
-ln -snf /usr/share/zoneinfo/Europe/Berlin /etc/localtime
+if [ "$SET_CONTAINER_TIMEZONE" = "true" ]; then
+        ln -snf /usr/share/zoneinfo/${CONTAINER_TIMEZONE} /etc/localtime && \
+	echo "Container timezone set to: $CONTAINER_TIMEZONE"
+else
+	echo "Container timezone not modified"
+fi
 
 # Wait until Elasticsearch is online since otherwise Elastalert will fail.
 if [ -n "$ELASTICSEARCH_USER" ] && [ -n "$ELASTICSEARCH_PASSWORD" ]; then
